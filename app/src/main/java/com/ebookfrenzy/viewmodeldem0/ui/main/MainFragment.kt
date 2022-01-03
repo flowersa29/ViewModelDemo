@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.ebookfrenzy.viewmodeldem0.R
 import com.ebookfrenzy.viewmodeldem0.databinding.MainFragmentBinding
 
@@ -38,13 +39,20 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        binding.resultText.text = viewModel.getResult().toString()
+//        binding.resultText.text = viewModel.getResult().toString()
+
+        // add observer
+        val resultObserver = Observer<Float>{
+            result -> binding.resultText.text = result.toString()
+        }
+
+        viewModel.getResult().observe(viewLifecycleOwner,resultObserver)
 
         binding.convertButton.setOnClickListener{
            if (binding.dollarText.text.isNotEmpty()){
                viewModel.setAmount(binding.dollarText.text.toString())
 
-               binding.resultText.text = viewModel.getResult().toString()
+//               binding.resultText.text = viewModel.getResult().toString()
            } else {
                binding.resultText.text = "No Value"
            }
